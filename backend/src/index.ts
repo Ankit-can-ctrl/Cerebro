@@ -1,9 +1,22 @@
 import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import connectDB from "./config/db";
+import authRouter from "./routes/userRoutes";
+import dotenv from "dotenv"; //this is necessary for importing .env variables at very beginning
 
+dotenv.config();
 const app = express();
 
-app.post("/api/v1/signup", (req, res) => {});
+// Middleware to parse JSON bodies
+app.use(express.json());
+// Middleware to parse URL-encoded bodies (form data)
+app.use(express.urlencoded({ extended: true }));
 
-app.post("/api/v1/signin", (req, res) => {});
+connectDB();
+
+app.use("/api/v1/auth", authRouter);
+
+app.listen(3000, () => {
+  console.log(`Server started on 3000`);
+});
