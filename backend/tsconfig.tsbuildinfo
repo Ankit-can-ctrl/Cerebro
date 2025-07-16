@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/config/db.ts","./src/controllers/authcontroller.ts","./src/models/usermodel.ts","./src/routes/userroutes.ts"],"version":"5.8.3"}
+{"root":["./src/index.ts","./src/config/db.ts","./src/controllers/authcontroller.ts","./src/controllers/contentcontroller.ts","./src/middleware/authmiddleware.ts","./src/models/contentmodel.ts","./src/models/usermodel.ts","./src/routes/contentroutes.ts","./src/routes/userroutes.ts"],"version":"5.8.3"}

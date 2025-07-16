@@ -41,6 +41,7 @@ export const login = async (req: Request, res: Response) => {
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid credentials!" });
     }
+    // here below we using JWT_SECRET_KEY! because we telling ts that it is not null
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY!, {
       expiresIn: "2h",
     });
