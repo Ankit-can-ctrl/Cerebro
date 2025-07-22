@@ -18,7 +18,7 @@ export const PlusIcon = (props: PlusIconProps) => {
       viewBox="0 0 24 24"
       stroke-width="2.5"
       stroke="currentColor"
-      className={`${sizeStyles[props.size]} ${defaultStyle}`}
+      className={`${sizeStyles[props.size]} ${defaultStyle}` || "size-6"}
     >
       <path
         stroke-linecap="round"
