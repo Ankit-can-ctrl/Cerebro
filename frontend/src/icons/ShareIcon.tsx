@@ -1,12 +1,22 @@
-export const ShareIcon = () => {
+export interface ShareIconProps {
+  size: "sm" | "md" | "lg";
+}
+
+const sizeStyles = {
+  sm: "size-4",
+  md: "size-6",
+  lg: "size-8",
+};
+
+export const ShareIcon = (props: ShareIconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      stroke-width="1.5"
+      stroke-width="2"
       stroke="currentColor"
-      className="size-6"
+      className={`${sizeStyles[props.size]}` || "size-6"}
     >
       <path
         stroke-linecap="round"

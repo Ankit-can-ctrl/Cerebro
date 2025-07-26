@@ -1,15 +1,9 @@
-import Button from "./components/ui/Button";
-import { PlusIcon } from "./icons/PlusIcon";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
-    <div className=" w-full h-[100vh] flex items-center justify-center gap-5">
-      <Button
-        startIcon={<PlusIcon size="sm" />}
-        text="Add"
-        variant="primary"
-        size="sm"
-      />
+    <div className="h-screen bg-gray-900 text-white overflow-hidden">
+      <Navbar />
     </div>
   );
 };

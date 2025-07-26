@@ -10,8 +10,10 @@ export interface ButtonProps {
 }
 
 const variantStyles = {
-  primary: "bg-purple-600 text-white",
-  secondary: "bg-purple-400 text-purple-600",
+  primary:
+    "bg-gradient-to-r from-cyan-700 to-gray-400 hover:scale-105 transition-all duration-300 text-white",
+  secondary:
+    "bg-gradient-to-r from-cyan-700 to-gray-800 hover:scale-105  transition-all duration-300 text-white",
 };
 
 const defaultStyle =
