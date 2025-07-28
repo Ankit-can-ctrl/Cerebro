@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
-    <div className="h-screen bg-gray-900 text-white overflow-hidden font-main">
+    <div className="h-screen bg-gray-900 text-white overflow-hidden font-secondary">
       <Navbar />
       <BrainCard />
     </div>

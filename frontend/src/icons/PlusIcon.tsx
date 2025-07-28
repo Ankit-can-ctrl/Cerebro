@@ -6,15 +6,15 @@ export const PlusIcon = (props: IconProps) => {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      stroke-width="2.5"
+      strokeWidth="2.5"
       stroke="currentColor"
-      className={`${sizeStyles[props.size || "md"]} ${
+      className={`${sizeStyles[props.size || "sm"]} ${
         colorStyles[props.color || "primary"]
       }`}
     >
       <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         d="M12 4.5v15m7.5-7.5h-15"
       />
     </svg>

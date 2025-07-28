@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        main: ["Londrina Shadow", "sans-serif"],
+        primary: ["Mystery Quest", "sans-serif"],
+        secondary: ["Playwrite AU QLD", "sans-serif"],
       },
     },
   },

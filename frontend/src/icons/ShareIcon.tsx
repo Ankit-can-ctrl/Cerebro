@@ -7,12 +7,12 @@ export const ShareIcon = (props: IconProps) => {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className={`lucide lucide-share2-icon lucide-share-2 ${
         colorStyles[props.color || "primary"]
-      } ${sizeStyles[props.size || "md"]}`}
+      } ${sizeStyles[props.size || "sm"]}`}
     >
       <circle cx="18" cy="5" r="3" />
       <circle cx="6" cy="12" r="3" />
