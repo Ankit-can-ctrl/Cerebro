@@ -11,9 +11,9 @@ export interface ButtonProps {
 
 const variantStyles = {
   primary:
-    "bg-gradient-to-r from-cyan-700 to-gray-400 hover:scale-105 transition-all duration-300 text-white",
+    "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 hover:scale-105 transition-all duration-300 text-white",
   secondary:
-    "bg-gradient-to-r from-cyan-700 to-gray-800 hover:scale-105  transition-all duration-300 text-white",
+    "bg-gray-700/50 hover:bg-gray-600/50 hover:scale-105  transition-all duration-300 text-white",
 };
 
 const defaultStyle =

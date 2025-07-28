@@ -14,14 +14,14 @@ const Navbar = () => {
         <Button
           text="Share"
           variant="primary"
-          size="md"
-          startIcon={<ShareIcon size="md" />}
+          size="sm"
+          startIcon={<ShareIcon size="sm" />}
         />
         <Button
           text="Add"
           variant="secondary"
-          size="md"
-          startIcon={<PlusIcon size="md" />}
+          size="sm"
+          startIcon={<PlusIcon size="sm" />}
         />
       </div>
     </div>
