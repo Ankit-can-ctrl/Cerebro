@@ -17,7 +17,7 @@ interface BrainCardProps {
 const BrainCard = ({
   link = "https://www.youtube.com/watch?v=fe0QmskwWEM",
   title = "New tech 2025",
-  type = "document",
+  type = "youtube",
   description = "New tech 2025",
 }: BrainCardProps) => {
   return (
@@ -48,7 +48,7 @@ const BrainCard = ({
           </div>
         </header>
         {/* card content */}
-        <div className="content rounded-lg overflow-hidden mt-4">
+        <div className="content rounded-lg overflow-hidden ">
           {/* yoututbe video */}
           {type === "youtube" && (
             <iframe
@@ -69,9 +69,28 @@ const BrainCard = ({
           )}
           {/* document */}
           {type === "document" && (
-            <div className="text-sm text-black flex items-center gap-2">
-              <DocIcon size="md" color="secondary" />
-              <p className="description line-clamp-3">{description}</p>
+            <div className=" text-black flex flex-col gap-2">
+              <div className=" bg-blue-100  flex items-center justify-center py-5 rounded-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="68"
+                  height="68"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-book-text-icon lucide-book-text text-gray-500 cursor-pointer"
+                >
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+                  <path d="M8 11h8" />
+                  <path d="M8 7h6" />
+                </svg>
+              </div>
+              <p className="description text-[11px] line-clamp-2">
+                {description}
+              </p>
             </div>
           )}
         </div>
