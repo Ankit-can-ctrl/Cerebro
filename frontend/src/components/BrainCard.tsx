@@ -11,14 +11,14 @@ interface BrainCardProps {
   link?: string;
   title: string;
   description?: string;
-  type: "youtube" | "twitter" | "document" | "link" | "image" | "music";
+  type: "youtube" | "twitter" | "document" | "website" | "image" | "music";
 }
 
 const BrainCard = ({
   link = "https://www.youtube.com/watch?v=fe0QmskwWEM",
   title = "New tech 2025",
-  type = "youtube",
-  description = "New tech 2025",
+  type = "website",
+  description = "Dustin vs max trilogy UFC",
 }: BrainCardProps) => {
   return (
     <>
@@ -29,7 +29,7 @@ const BrainCard = ({
             {type === "youtube" && <YoutubeIcon size="lg" color="secondary" />}
             {type === "twitter" && <TweetIcon size="md" color="secondary" />}
             {type === "document" && <DocIcon size="md" color="secondary" />}
-            {type === "link" && <LinkIcon size="md" color="secondary" />}
+            {type === "website" && <LinkIcon size="md" color="secondary" />}
             {type === "image" && <ImageIcon size="md" color="secondary" />}
             {type === "music" && <MusicIcon size="md" color="secondary" />}
 
@@ -60,7 +60,37 @@ const BrainCard = ({
               allowFullScreen
             ></iframe>
           )}
-
+          {/* image */}
+          {type === "image" && (
+            <div>
+              <img src={link} alt="image" className="w-full h-full" />
+              <p className="description text-[11px] truncate pb-2">
+                {description}
+              </p>
+            </div>
+          )}
+          {/* music */}
+          {type === "music" && (
+            <div className=" bg-gray-200  flex items-center justify-center py-5 rounded-lg">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="68"
+                height="68"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-headphones-icon lucide-headphones"
+              >
+                <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
+              </svg>
+              <p className="description text-[11px] truncate pb-2">
+                {description}
+              </p>
+            </div>
+          )}
           {/* tweet */}
           {type === "twitter" && (
             <blockquote className="twitter-tweet w-full h-full">
@@ -88,9 +118,41 @@ const BrainCard = ({
                   <path d="M8 7h6" />
                 </svg>
               </div>
-              <p className="description text-[11px] line-clamp-2">
+              <p className="description text-[11px] line-clamp-2 pb-2">
                 {description}
               </p>
+            </div>
+          )}
+          {/* website */}
+          {type === "website" && (
+            <div className=" text-black flex flex-col gap-2">
+              <div className=" bg-gray-200  flex items-center justify-center py-5 rounded-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="68"
+                  height="68"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-globe-icon lucide-globe"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                  <path d="M2 12h20" />
+                </svg>
+              </div>
+              <p className="description text-[11px] truncate pb-2">
+                {description}
+              </p>
+              <button
+                onClick={() => window.open(link, "_blank")}
+                className="text-[11px] font-semibold text-white bg-blue-600 rounded-md px-2 py-1"
+              >
+                Visit website
+              </button>
             </div>
           )}
         </div>
