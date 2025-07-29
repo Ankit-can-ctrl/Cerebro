@@ -28,6 +28,7 @@ const sizeStyles = {
 function Button(props: ButtonProps) {
   return (
     <button
+      onClick={props.onClick}
       className={`${variantStyles[props.variant]} ${defaultStyle} ${
         sizeStyles[props.size]
       }`}
