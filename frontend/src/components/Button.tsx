@@ -7,6 +7,7 @@ export interface ButtonProps {
   startIcon?: any | ReactElement;
   endIcon?: any | ReactElement;
   onClick?: () => void;
+  type?: "button" | "submit" | "reset";
 }
 
 const variantStyles = {
@@ -28,6 +29,7 @@ const sizeStyles = {
 function Button(props: ButtonProps) {
   return (
     <button
+      type={props.type || "button"}
       onClick={props.onClick}
       className={`${variantStyles[props.variant]} ${defaultStyle} ${
         sizeStyles[props.size]
