@@ -63,6 +63,14 @@ const AddBrainModal = ({ onClose }: AddBrainModalProps) => {
     e.preventDefault();
     console.log("form submitted.");
     // validation and submission logic here
+    try {
+      setIsSubmitting(true);
+      console.log("form submitted.", formData);
+      setIsSubmitting(false);
+    } catch (error) {
+      console.log("error", error);
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -105,14 +113,17 @@ const AddBrainModal = ({ onClose }: AddBrainModalProps) => {
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="mt-2 flex flex-col gap-2 items-start text-lg"
+          className="mt-2 flex flex-col gap-3 items-start text-lg"
         >
-          <div className="flex gap-2 items-center justify-center">
-            <label className="text-sm text-white font-semibold" htmlFor="title">
-              Title :
+          <div className="w-full">
+            <label
+              className="text-sm text-white font-semibold block mb-1"
+              htmlFor="title"
+            >
+              Title:
             </label>
             <input
-              className={`rounded-md py-1 px-2 text-lg outline-none ${
+              className={`w-full rounded-md py-2 px-3 text-sm outline-none ${
                 errors.title ? "border-red-500" : ""
               }`}
               id="title"
@@ -123,47 +134,62 @@ const AddBrainModal = ({ onClose }: AddBrainModalProps) => {
               placeholder="Enter a title for your brain."
             />
             {errors.title && (
-              <p className="text-red-500 text-sm">{errors.title}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.title}</p>
             )}
           </div>
-          <div className="flex gap-2 items-center justify-center">
-            <label className="text-sm text-white font-semibold" htmlFor="title">
-              Link :
+          <div className="w-full">
+            <label
+              className="text-sm text-white font-semibold block mb-1"
+              htmlFor="link"
+            >
+              Link:
             </label>
             <input
-              className={`rounded-md py-1 px-2 text-lg outline-none ${
+              className={`w-full rounded-md py-2 px-3 text-sm outline-none ${
                 errors.link ? "border-red-500" : ""
               }`}
               name="link"
-              typeof="url"
-              id="title"
+              type="text"
+              id="link"
               value={formData.link}
               onChange={handleInputChange}
               placeholder="Paste link here...."
             />
+            {errors.link && (
+              <p className="text-red-500 text-sm mt-1">{errors.link}</p>
+            )}
           </div>
           <div className="w-full">
+            <label
+              className="text-sm text-white font-semibold block mb-1"
+              htmlFor="description"
+            >
+              Description:
+            </label>
             <textarea
-              className="w-full rounded-md py-1 px-2 text-lg outline-none"
-              name="Description"
+              className="w-full rounded-md py-2 px-3 text-sm outline-none"
+              name="description"
               id="description"
               placeholder="Describe your brain..."
               value={formData.description}
               onChange={handleInputChange}
               rows={3}
             ></textarea>
+            {errors.description && (
+              <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+            )}
+          </div>
+
+          {/* button */}
+          <div className="mt-2 flex items-center justify-center">
+            <Button
+              type="submit"
+              text={isSubmitting ? "Loading..." : "Add Brain"}
+              variant="primary"
+              size="md"
+            />
           </div>
         </form>
-
-        {/* button */}
-        <div className="mt-2 flex items-center justify-center">
-          <Button
-            type="submit"
-            text={isSubmitting ? "Loading..." : "Add Brain"}
-            variant="primary"
-            size="md"
-          />
-        </div>
       </div>
     </div>
   );
