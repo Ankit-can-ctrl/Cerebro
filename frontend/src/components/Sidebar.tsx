@@ -24,15 +24,15 @@ const categories: Category[] = [
 
 const Sidebar = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryId>("youtube");
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
 
   const toggleCollapsed = () => setIsCollapsed((prev) => !prev);
 
   return (
     <aside
-      className={`absolute left-0 top-32 bg-gradient-to-r from-purple-600/80 to-pink-700/80 ${
+      className={`bg-gradient-to-r from-purple-600/80 to-pink-700/60 ${
         isCollapsed ? "w-[84px]" : "w-[300px]"
-      } min-h-[600px] rounded-r-lg backdrop-blur-sm px-3 transition-all duration-300 ease-out`}
+      } h-[600px] absolute mt-10 rounded-none md:rounded-r-lg backdrop-blur-sm px-3 transition-all duration-300 ease-out`}
     >
       <div className="relative h-full py-6">
         <button
@@ -40,7 +40,11 @@ const Sidebar = () => {
           onClick={toggleCollapsed}
           className="absolute right-2 top-2 p-2 rounded-md bg-white/10 hover:bg-white/20 text-white border border-white/10 transition-colors"
         >
-          {isCollapsed ? <PlusIcon size="sm" /> : <CloseIcon size="sm" />}
+          {isCollapsed ? (
+            <PlusIcon size="sm" />
+          ) : (
+            <CloseIcon size="sm" color="primary" />
+          )}
         </button>
 
         {!isCollapsed && (
@@ -61,7 +65,7 @@ const Sidebar = () => {
                       isCollapsed ? "justify-center gap-0 px-2" : "gap-3 px-3"
                     } py-2 rounded-md transition-colors border border-white/10 ${
                       isActive
-                        ? "bg-white/15 text-white"
+                        ? "bg-white/15 text-white border border-white"
                         : "bg-white/5 hover:bg-white/10 text-white/90"
                     }`}
                   >

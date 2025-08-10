@@ -3,3 +3,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Floating orbs background */
+.floating-orbs {
+  filter: blur(24px);
+}
+
+.floating-orbs .orb {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0.12;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(147, 197, 253, 0.9),
+    rgba(59, 130, 246, 0.2) 60%,
+    rgba(2, 6, 23, 0) 70%
+  );
+  box-shadow: 0 0 120px 20px rgba(59, 130, 246, 0.25),
+    0 0 200px 40px rgba(99, 102, 241, 0.15) inset;
+  will-change: transform;
+}
+
+@keyframes orbFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  25% {
+    transform: translate3d(30px, -40px, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-25px, -10px, 0) scale(0.95);
+  }
+  75% {
+    transform: translate3d(15px, 30px, 0) scale(1.02);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Full-screen particles canvas behind the app */
+#bg-particles {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0; /* keep behind app; app containers use bg color */
+  pointer-events: none;
+  opacity: 1; /* full opacity */
+}

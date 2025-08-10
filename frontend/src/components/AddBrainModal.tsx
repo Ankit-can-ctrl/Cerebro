@@ -22,7 +22,6 @@ type CategoryType =
   | "music";
 
 const AddBrainModal = ({ onClose }: AddBrainModalProps) => {
-  const [category, setCategory] = useState<string>("youtube");
   const [formData, setFormData] = useState<BrainFormData>({
     title: "",
     link: "",

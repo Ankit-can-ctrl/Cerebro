@@ -1,24 +1,14 @@
-import { useState } from "react";
-import AddBrainModal from "./components/AddBrainModal";
-import BrainCard from "./components/BrainCard";
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
+import { Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
 
 const App = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
   return (
-    <div className=" relative h-screen bg-gray-900 text-white overflow-hidden font-secondary">
-      {isModalOpen && <AddBrainModal onClose={handleModal} />}
-      <Navbar onOpen={handleModal} />
-      {/* <BrainCard /> */}
-      <div>
-        <Sidebar />
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+      </Route>
+    </Routes>
   );
 };
 
