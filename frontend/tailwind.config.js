@@ -6,6 +6,7 @@ export default {
       fontFamily: {
         primary: ["Mystery Quest", "sans-serif"],
         secondary: ["Playwrite AU QLD", "sans-serif"],
+        tertiary: ["Oswald", "sans-serif"],
       },
     },
   },

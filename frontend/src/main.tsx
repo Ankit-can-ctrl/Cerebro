@@ -3,22 +3,18 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
-import { startParticles } from "./particles";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const rootElement = document.getElementById("root")!;
 
-// Start background particles behind the app
-const canvas = document.getElementById(
-  "bg-particles"
-) as HTMLCanvasElement | null;
-if (canvas) {
-  startParticles(canvas);
-}
+const queryClient = new QueryClient();
 
 createRoot(rootElement).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
   </StrictMode>
 );

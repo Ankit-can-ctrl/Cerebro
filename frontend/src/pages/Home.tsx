@@ -1,5 +1,11 @@
+import BrainCard from "../components/BrainCard";
+
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div className=" ">
+      <BrainCard />
+    </div>
+  );
 };
 
 export default Home;

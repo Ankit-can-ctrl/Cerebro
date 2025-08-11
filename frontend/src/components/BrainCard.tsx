@@ -9,20 +9,20 @@ import MusicIcon from "../icons/MusicIcon";
 
 interface BrainCardProps {
   link?: string;
-  title: string;
+  title?: string;
   description?: string;
-  type: "youtube" | "twitter" | "document" | "website" | "image" | "music";
+  type?: "youtube" | "twitter" | "document" | "website" | "image" | "music";
 }
 
 const BrainCard = ({
   link = "https://www.youtube.com/watch?v=fe0QmskwWEM",
   title = "New tech 2025",
-  type = "website",
+  type = "youtube",
   description = "Dustin vs max trilogy UFC",
 }: BrainCardProps) => {
   return (
     <>
-      <div className="bg-white rounded-lg w-[350px] min-h-[300px] p-3 group flex flex-col justify-between">
+      <div className="bg-white rounded-lg w-[350px] min-h-[300px] p-3 group flex flex-col justify-between z-[99999]">
         {/* card header */}
         <header className="header border-b border-gray-200 py-2 w-full flex justify-between">
           <div className="headings flex items-center justify-center gap-2">
