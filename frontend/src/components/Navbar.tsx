@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
@@ -8,6 +9,11 @@ interface NavbarProps {
 }
 
 const Navbar = ({ onOpen }: NavbarProps) => {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   return (
     <div className="bg-gradient-to-b from-gray-800/80 to-transparent w-full min-h-[60px] backdrop-blur-sm px-10 py-5 flex justify-between">
       <div className="title flex items-center">
@@ -28,6 +34,14 @@ const Navbar = ({ onOpen }: NavbarProps) => {
             variant="secondary"
             size="sm"
             startIcon={<PlusIcon size="sm" />}
+          />
+        </div>
+        <div className="cursor-pointer">
+          <Button
+            onClick={handleLogout}
+            text="Logout"
+            variant="secondary"
+            size="sm"
           />
         </div>
       </div>

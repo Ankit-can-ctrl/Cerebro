@@ -26,7 +26,7 @@ const Account = () => {
     if (existingToken) {
       navigate("/dashboard");
     }
-  }, [navigate]);
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

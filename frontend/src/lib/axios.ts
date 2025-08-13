@@ -13,9 +13,17 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
+    const status = err?.response?.status;
+    if (status === 401) {
+      localStorage.removeItem("token");
+      if (window.location.pathname !== "/accounts") {
+        window.location.href = "/accounts";
+      }
+    }
+
     const message =
       err?.response?.data?.message ||
-      err?.respone?.data?.error ||
+      err?.response?.data?.error ||
       err.message ||
       "Request Failed";
     return Promise.reject(new Error(message));

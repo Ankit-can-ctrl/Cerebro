@@ -15,7 +15,7 @@ interface Thought {
 const Landing: React.FC = () => {
   const [thoughts, setThoughts] = useState<Thought[]>([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
