@@ -6,8 +6,16 @@ import MusicIcon from "../icons/MusicIcon";
 import CloseIcon from "../icons/CloseIcon";
 import { PlusIcon } from "../icons/PlusIcon";
 import type { IconProps } from "../types/IconProps";
+import { useContentFilter } from "../hooks/useContentFilter";
 
-type CategoryId = "youtube" | "twitter" | "doc" | "music";
+type CategoryId =
+  | "all"
+  | "youtube"
+  | "twitter"
+  | "document"
+  | "website"
+  | "image"
+  | "music";
 
 interface Category {
   id: CategoryId;
@@ -16,14 +24,17 @@ interface Category {
 }
 
 const categories: Category[] = [
+  { id: "all", label: "All", Icon: YoutubeIcon },
   { id: "youtube", label: "YouTube", Icon: YoutubeIcon },
   { id: "twitter", label: "Twitter", Icon: TweetIcon },
-  { id: "doc", label: "Docs", Icon: DocIcon },
+  { id: "document", label: "Documents", Icon: DocIcon },
+  { id: "website", label: "Websites", Icon: DocIcon },
+  { id: "image", label: "Images", Icon: DocIcon },
   { id: "music", label: "Music", Icon: MusicIcon },
 ];
 
 const Sidebar = () => {
-  const [activeCategory, setActiveCategory] = useState<CategoryId>("youtube");
+  const { selectedCategory, setSelectedCategory } = useContentFilter();
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
 
   const toggleCollapsed = () => setIsCollapsed((prev) => !prev);
@@ -32,7 +43,7 @@ const Sidebar = () => {
     <aside
       className={`bg-gradient-to-r from-purple-600/80 to-pink-700/60 ${
         isCollapsed ? "w-[84px]" : "w-[300px]"
-      } h-[600px] absolute mt-10 rounded-none md:rounded-r-lg backdrop-blur-sm px-3 transition-all duration-300 ease-out`}
+      } h-fit absolute top-1/3 rounded-none md:rounded-r-lg backdrop-blur-sm px-3 transition-all duration-300 ease-out`}
     >
       <div className="relative h-full py-6">
         <button
@@ -55,12 +66,12 @@ const Sidebar = () => {
         <nav className={isCollapsed ? "mt-10" : ""}>
           <ul className="flex flex-col gap-2">
             {categories.map(({ id, label, Icon }) => {
-              const isActive = id === activeCategory;
+              const isActive = id === selectedCategory;
               return (
                 <li key={id}>
                   <button
                     type="button"
-                    onClick={() => setActiveCategory(id)}
+                    onClick={() => setSelectedCategory(id)}
                     className={`w-full flex items-center ${
                       isCollapsed ? "justify-center gap-0 px-2" : "gap-3 px-3"
                     } py-2 rounded-md transition-colors border border-white/10 ${

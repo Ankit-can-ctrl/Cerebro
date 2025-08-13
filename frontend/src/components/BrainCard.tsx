@@ -8,6 +8,7 @@ import LinkIcon from "../icons/LinkIcon";
 import ImageIcon from "../icons/ImageIcon";
 import MusicIcon from "../icons/MusicIcon";
 import Loader from "./Loader";
+import { useContent } from "../hooks/useContent";
 
 declare global {
   interface Window {
@@ -16,6 +17,7 @@ declare global {
 }
 
 interface BrainCardProps {
+  id: string;
   link?: string;
   title?: string;
   description?: string;
@@ -23,15 +25,18 @@ interface BrainCardProps {
 }
 
 const BrainCard = ({
+  id,
   link = "https://www.youtube.com/watch?v=fe0QmskwWEM",
   title = "New tech 2025",
   type = "youtube",
   description = "Dustin vs max trilogy UFC",
 }: BrainCardProps) => {
+  const { deleteContent } = useContent();
   const [isContentLoaded, setIsContentLoaded] = useState(
     type !== "youtube" && type !== "twitter" && type !== "image"
   );
   const twitterContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const toSeconds = (t: string | null): number => {
     if (!t) return 0;
@@ -174,7 +179,21 @@ const BrainCard = ({
             >
               <ShareIcon color="secondary" />
             </div>
-            <div className="cursor-pointer" onClick={() => {}}>
+            <div
+              className={`cursor-pointer ${
+                isDeleting ? "opacity-50 pointer-events-none" : ""
+              }`}
+              onClick={async () => {
+                try {
+                  setIsDeleting(true);
+                  await deleteContent.mutateAsync({ contentId: id });
+                } catch (e) {
+                  alert((e as Error).message || "Failed to delete");
+                } finally {
+                  setIsDeleting(false);
+                }
+              }}
+            >
               <TrashIcon color="secondary" />
             </div>
           </div>
@@ -218,24 +237,22 @@ const BrainCard = ({
           )}
           {/* music */}
           {type === "music" && (
-            <div className=" bg-gray-200  flex items-center justify-center py-5 rounded-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="68"
-                height="68"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-headphones-icon lucide-headphones"
-              >
-                <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
-              </svg>
-              <p className="description text-[11px] line-clamp-3 pb-2">
-                {description}
-              </p>
+            <div className=" text-black flex flex-col gap-2">
+              <div className=" bg-gray-200 flex items-center justify-center py-3 rounded-lg px-2">
+                <audio
+                  className="w-full"
+                  src={link}
+                  controls
+                  preload="metadata"
+                  onCanPlay={() => setIsContentLoaded(true)}
+                  onError={() => setIsContentLoaded(true)}
+                />
+              </div>
+              {description && (
+                <p className="description text-[11px] line-clamp-3 pb-2">
+                  {description}
+                </p>
+              )}
             </div>
           )}
           {/* tweet */}

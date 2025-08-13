@@ -180,3 +180,93 @@ export const uploadImageByUrl = async (
     res.status(500).json({ error: message });
   }
 };
+
+// Upload audio (mp3/wav/etc) to Cloudinary via multipart form-data
+export const uploadAudio = async (
+  req: RequestWithUser & Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (
+      !process.env.CLOUDINARY_CLOUD_NAME ||
+      !process.env.CLOUDINARY_API_KEY ||
+      !process.env.CLOUDINARY_API_SECRET
+    ) {
+      res.status(500).json({
+        error:
+          "Cloudinary is not configured. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET in backend/.env",
+      });
+      return;
+    }
+
+    const file = (req as any).file as Express.Multer.File | undefined;
+    if (!file) {
+      res.status(400).json({ error: "Audio file is required." });
+      return;
+    }
+
+    const uploadResult = await new Promise<{
+      secure_url: string;
+      public_id: string;
+    }>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "cerebro/uploads", resource_type: "auto" },
+        (error, result) => {
+          if (error || !result) return reject(error);
+          resolve({
+            secure_url: result.secure_url,
+            public_id: result.public_id,
+          });
+        }
+      );
+      uploadStream.end(file.buffer);
+    });
+
+    res.status(200).json(uploadResult);
+  } catch (error) {
+    console.error("Cloudinary audio upload error:", error);
+    const message = (error as any)?.message || "Failed to upload audio.";
+    res.status(500).json({ error: message });
+  }
+};
+
+// Upload audio to Cloudinary by URL (mp3/wav/etc)
+export const uploadAudioByUrl = async (
+  req: RequestWithUser,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (
+      !process.env.CLOUDINARY_CLOUD_NAME ||
+      !process.env.CLOUDINARY_API_KEY ||
+      !process.env.CLOUDINARY_API_SECRET
+    ) {
+      res.status(500).json({
+        error:
+          "Cloudinary is not configured. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET in backend/.env",
+      });
+      return;
+    }
+
+    const { audioUrl } = req.body as { audioUrl?: string };
+    if (!audioUrl) {
+      res.status(400).json({ error: "audioUrl is required." });
+      return;
+    }
+
+    const result = await cloudinary.uploader.upload(audioUrl, {
+      folder: "cerebro/uploads",
+      resource_type: "auto",
+    });
+    res
+      .status(200)
+      .json({ secure_url: result.secure_url, public_id: result.public_id });
+  } catch (error) {
+    console.error("Cloudinary upload audio by URL error:", error);
+    const message =
+      (error as any)?.message || "Failed to upload audio from URL.";
+    res.status(500).json({ error: message });
+  }
+};

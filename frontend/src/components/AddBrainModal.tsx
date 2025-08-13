@@ -34,9 +34,13 @@ const AddBrainModal = ({ onClose }: AddBrainModalProps) => {
   const [errors, setErrors] = useState<Partial<BrainFormData>>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
+  const [isUploadingAudio, setIsUploadingAudio] = useState<boolean>(false);
   const [imageSource, setImageSource] = useState<"file" | "url">("file");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrlInput, setImageUrlInput] = useState<string>("");
+  const [musicSource, setMusicSource] = useState<"file" | "url">("file");
+  const [musicFile, setMusicFile] = useState<File | null>(null);
+  const [musicUrlInput, setMusicUrlInput] = useState<string>("");
   const [isFetchingMeta, setIsFetchingMeta] = useState<boolean>(false);
   const [websiteMeta, setWebsiteMeta] = useState<{
     title: string | null;
@@ -155,6 +159,78 @@ const AddBrainModal = ({ onClose }: AddBrainModalProps) => {
 
         payload.link = secureUrl;
         setIsUploadingImage(false);
+      }
+
+      if (formData.type === "music") {
+        setIsUploadingAudio(true);
+        let finalType = "music" as BrainFormData["type"]; // may switch to youtube for YT links
+        let audioUrl: string | null = null;
+
+        const isYouTube = (u: string) => {
+          try {
+            const host = new URL(
+              /^https?:\/\//i.test(u) ? u : `https://${u}`
+            ).hostname
+              .replace(/^www\./, "")
+              .toLowerCase();
+            return (
+              host === "youtube.com" ||
+              host === "music.youtube.com" ||
+              host === "m.youtube.com" ||
+              host === "youtu.be" ||
+              host.endsWith(".youtube.com")
+            );
+          } catch {
+            return /youtu\.be|youtube\.com/i.test(u);
+          }
+        };
+
+        if (musicSource === "file") {
+          if (!musicFile) {
+            setErrors((prev) => ({
+              ...prev,
+              link: "Please choose an audio file.",
+            }));
+            setIsUploadingAudio(false);
+            return;
+          }
+          const fd = new FormData();
+          fd.append("audio", musicFile);
+          const uploadRes = await api.post("/content/upload/audio", fd, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+          audioUrl = uploadRes.data.secure_url as string;
+        } else {
+          const url = musicUrlInput.trim();
+          if (!url) {
+            setErrors((prev) => ({
+              ...prev,
+              link: "Please paste an audio URL.",
+            }));
+            setIsUploadingAudio(false);
+            return;
+          }
+          // If YouTube link, store as youtube content instead
+          if (isYouTube(url)) {
+            finalType = "youtube";
+            audioUrl = url;
+          } else {
+            // If it's a direct audio or other host, try uploading by URL to get a stable CDN link
+            try {
+              const uploadRes = await api.post("/content/upload/audio-by-url", {
+                audioUrl: url,
+              });
+              audioUrl = uploadRes.data.secure_url as string;
+            } catch {
+              // Fallback to saving raw URL if Cloudinary rejects it
+              audioUrl = url;
+            }
+          }
+        }
+
+        payload.link = audioUrl;
+        payload.type = finalType;
+        setIsUploadingAudio(false);
       }
 
       await addContent.mutateAsync(payload);
@@ -310,6 +386,70 @@ const AddBrainModal = ({ onClose }: AddBrainModalProps) => {
                     {isUploadingImage && (
                       <div className="text-white text-xs opacity-80">
                         Uploading image…
+                      </div>
+                    )}
+                    {errors.link && (
+                      <p className="text-red-500 text-sm mt-1">{errors.link}</p>
+                    )}
+                  </div>
+                ) : formData.type === "music" ? (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 text-xs">
+                      <button
+                        type="button"
+                        className={`${
+                          musicSource === "file"
+                            ? "bg-purple-700 text-white"
+                            : "bg-gray-200 text-gray-700"
+                        } px-2 py-1 rounded`}
+                        onClick={() => setMusicSource("file")}
+                      >
+                        Upload file
+                      </button>
+                      <button
+                        type="button"
+                        className={`${
+                          musicSource === "url"
+                            ? "bg-purple-700 text-white"
+                            : "bg-gray-200 text-gray-700"
+                        } px-2 py-1 rounded`}
+                        onClick={() => setMusicSource("url")}
+                      >
+                        Use URL
+                      </button>
+                    </div>
+                    {musicSource === "file" ? (
+                      <div className="flex flex-col gap-2">
+                        <input
+                          className={`w-full rounded-md py-2 px-3 text-sm outline-none ${
+                            errors.link ? "border-red-500" : ""
+                          }`}
+                          type="file"
+                          accept="audio/*"
+                          onChange={(e) =>
+                            setMusicFile(e.target.files?.[0] || null)
+                          }
+                        />
+                        {musicFile ? (
+                          <div className="text-xs text-white/90">
+                            {musicFile.name}
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : (
+                      <input
+                        className={`w-full rounded-md py-2 px-3 text-sm outline-none ${
+                          errors.link ? "border-red-500" : ""
+                        }`}
+                        type="text"
+                        value={musicUrlInput}
+                        onChange={(e) => setMusicUrlInput(e.target.value)}
+                        placeholder="https://example.com/song.mp3 or YouTube link"
+                      />
+                    )}
+                    {isUploadingAudio && (
+                      <div className="text-white text-xs opacity-80">
+                        Uploading audio…
                       </div>
                     )}
                     {errors.link && (

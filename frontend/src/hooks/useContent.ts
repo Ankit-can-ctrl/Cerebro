@@ -50,6 +50,27 @@ export function useContent() {
     },
   });
 
+  // delete content
+  type DeleteContentResponse = { message: string };
+  type DeleteContentInput = { contentId: string };
+
+  const deleteContent = useMutation<
+    DeleteContentResponse,
+    Error,
+    DeleteContentInput
+  >({
+    mutationKey: ["content", "delete"],
+    mutationFn: async ({ contentId }: DeleteContentInput) => {
+      const res = await api.delete("/content/remove", {
+        data: { contentId },
+      });
+      return res.data as DeleteContentResponse;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["content", "list"] });
+    },
+  });
+
   return {
     // data
     content: getContentQuery.data?.content ?? [],
@@ -59,5 +80,6 @@ export function useContent() {
     // actions
     refetch: getContentQuery.refetch,
     addContent,
+    deleteContent,
   };
 }

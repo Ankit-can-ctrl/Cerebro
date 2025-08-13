@@ -6,6 +6,8 @@ import {
   removeContent,
   uploadImage,
   uploadImageByUrl,
+  uploadAudio,
+  uploadAudioByUrl,
 } from "../controllers/contentController";
 import multer from "multer";
 
@@ -25,5 +27,13 @@ contentRouter.post(
   uploadImage
 );
 contentRouter.post("/upload/image-by-url", authMiddleware, uploadImageByUrl);
+
+contentRouter.post(
+  "/upload/audio",
+  authMiddleware,
+  upload.single("audio"),
+  uploadAudio
+);
+contentRouter.post("/upload/audio-by-url", authMiddleware, uploadAudioByUrl);
 
 export default contentRouter;
