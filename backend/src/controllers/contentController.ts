@@ -2,6 +2,78 @@ import { Response, NextFunction, Request } from "express";
 import { RequestWithUser } from "../middleware/authmiddleware";
 import { Content } from "../models/contentModel";
 import cloudinary from "../config/cloudinary";
+import { getEmbedding } from "../lib/embedding";
+
+function dot(a: number[], b: number[]): number {
+  let s = 0;
+  const len = Math.min(a.length, b.length);
+  for (let i = 0; i < len; i++) s += a[i] * b[i];
+  return s;
+}
+
+function norm(a: number[]): number {
+  let s = 0;
+  for (let i = 0; i < a.length; i++) s += a[i] * a[i];
+  return Math.sqrt(s);
+}
+
+function cosineSimilarity(a: number[], b: number[]): number {
+  const na = norm(a);
+  const nb = norm(b);
+  if (na === 0 || nb === 0) return 0;
+  return dot(a, b) / (na * nb);
+}
+
+export const searchContent = async (
+  req: RequestWithUser,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const rawQ =
+      (req.query.q as string | undefined) ??
+      (req.query.query as string | undefined);
+    const q = rawQ?.trim();
+    const k = Math.max(1, Math.min(100, Number(req.query.k ?? 10)));
+    const minScore = Math.max(0, Math.min(1, Number(req.query.minScore ?? 0)));
+    if (!q) {
+      res.status(400).json({ error: "Missing query parameter 'q'." });
+      return;
+    }
+
+    const queryEmbedding = await getEmbedding(q);
+
+    const candidates = await Content.find(
+      { userId: req.userId, "embedding.0": { $exists: true } },
+      { title: 1, description: 1, link: 1, type: 1, embedding: 1 }
+    )
+      .lean()
+      .exec();
+
+    const scored = candidates
+      .map((doc) => {
+        const score = cosineSimilarity(
+          queryEmbedding,
+          (doc as any).embedding as number[]
+        );
+        return {
+          id: (doc as any)._id,
+          title: (doc as any).title,
+          description: (doc as any).description,
+          link: (doc as any).link,
+          type: (doc as any).type,
+          score,
+        };
+      })
+      .filter((item) => item.score >= minScore)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, k);
+
+    res.status(200).json({ results: scored, count: scored.length });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to search content." });
+  }
+};
 
 export const postContent = async (
   req: RequestWithUser,
@@ -19,6 +91,9 @@ export const postContent = async (
       return;
     }
 
+    const textForEmbedding = [title, description].filter(Boolean).join("\n");
+    const embedding = await getEmbedding(textForEmbedding);
+
     await Content.create({
       title,
       link,
@@ -26,6 +101,7 @@ export const postContent = async (
       userId: req.userId,
       type,
       tags: [],
+      embedding,
     });
 
     res.status(201).json({ message: "Content added successfully." });

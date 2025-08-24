@@ -14,6 +14,7 @@ const contentSchema = new mongoose.Schema({
   tags: [{ type: mongoose.Types.ObjectId, ref: "Tag" }],
   // this is a foreign key to the user model
   userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
+  embedding: { type: [Number], default: [] },
 });
 
 export const Content = mongoose.model("Content", contentSchema);

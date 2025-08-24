@@ -5,7 +5,9 @@
   "scripts": {
     "build": "tsc -b",
     "start": "node dist/index.js",
-    "dev": "npm run build && npm run start"
+    "dev": "npm run build && npm run start",
+    "backfill": "tsx src/scripts/backfillEmbeddings.ts",
+    "clear:embeddings": "tsx src/scripts/clearEmbeddings.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
     "mongoose": "^8.15.1",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "openai": "^5.15.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -28,6 +31,7 @@
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/multer": "^1.4.12",
+    "tsx": "^4.20.4",
     "typescript": "^5.8.3"
   }
 }
