@@ -3,6 +3,7 @@ import logo from "../assets/logo.png";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
 import Button from "./Button";
+import { enableShare } from "../hooks/useShareLink";
 
 interface NavbarProps {
   onOpen: () => void;
@@ -14,6 +15,13 @@ const Navbar = ({ onOpen }: NavbarProps) => {
     localStorage.removeItem("token");
     navigate("/");
   };
+
+  const handleShare = async () => {
+    const url = await enableShare();
+    await navigator.clipboard.writeText(url);
+    alert("Share link copied:\n" + url);
+  };
+
   return (
     <div className="bg-gradient-to-b from-gray-800/80 to-transparent w-full min-h-[60px] backdrop-blur-sm px-10 py-5 flex justify-between">
       <div className="title flex items-center">
@@ -22,6 +30,7 @@ const Navbar = ({ onOpen }: NavbarProps) => {
       </div>
       <div className="btns flex items-center gap-3">
         <Button
+          onClick={handleShare}
           text="Share"
           variant="primary"
           size="sm"

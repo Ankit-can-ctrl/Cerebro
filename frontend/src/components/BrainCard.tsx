@@ -22,6 +22,7 @@ interface BrainCardProps {
   title?: string;
   description?: string;
   type?: "youtube" | "twitter" | "document" | "website" | "image" | "music";
+  readOnly?: boolean;
 }
 
 const BrainCard = ({
@@ -30,6 +31,7 @@ const BrainCard = ({
   title = "New tech 2025",
   type = "youtube",
   description = "Dustin vs max trilogy UFC",
+  readOnly = false,
 }: BrainCardProps) => {
   const { deleteContent } = useContent();
   const [isContentLoaded, setIsContentLoaded] = useState(
@@ -172,31 +174,33 @@ const BrainCard = ({
 
             <h1 className="title text-sm text-black">{title}</h1>
           </div>
-          <div className="btns opacity-0 invisible group-hover:opacity-100 group-hover:visible flex items-center justify-center gap-4 transition-all duration-300 ease-in-out">
-            <div
-              className=" cursor-pointer"
-              onClick={() => window.open(link, "_blank")}
-            >
-              <ShareIcon color="secondary" />
+          {!readOnly && (
+            <div className="btns opacity-0 invisible group-hover:opacity-100 group-hover:visible flex items-center justify-center gap-4 transition-all duration-300 ease-in-out">
+              <div
+                className=" cursor-pointer"
+                onClick={() => window.open(link, "_blank")}
+              >
+                <ShareIcon color="secondary" />
+              </div>
+              <div
+                className={`cursor-pointer ${
+                  isDeleting ? "opacity-50 pointer-events-none" : ""
+                }`}
+                onClick={async () => {
+                  try {
+                    setIsDeleting(true);
+                    await deleteContent.mutateAsync({ contentId: id });
+                  } catch (e) {
+                    alert((e as Error).message || "Failed to delete");
+                  } finally {
+                    setIsDeleting(false);
+                  }
+                }}
+              >
+                <TrashIcon color="secondary" />
+              </div>
             </div>
-            <div
-              className={`cursor-pointer ${
-                isDeleting ? "opacity-50 pointer-events-none" : ""
-              }`}
-              onClick={async () => {
-                try {
-                  setIsDeleting(true);
-                  await deleteContent.mutateAsync({ contentId: id });
-                } catch (e) {
-                  alert((e as Error).message || "Failed to delete");
-                } finally {
-                  setIsDeleting(false);
-                }
-              }}
-            >
-              <TrashIcon color="secondary" />
-            </div>
-          </div>
+          )}
         </header>
         {/* card content */}
         <div className="content rounded-lg overflow-hidden ">

@@ -43,7 +43,7 @@ const Sidebar = () => {
     <aside
       className={`bg-gradient-to-r from-purple-600/80 to-pink-700/60 ${
         isCollapsed ? "w-[84px]" : "w-[300px]"
-      } h-fit absolute top-1/3 rounded-none md:rounded-r-lg backdrop-blur-sm px-3 transition-all duration-300 ease-out`}
+      } h-fit fixed left-0 top-1/2 -translate-y-1/2 rounded-none md:rounded-r-lg backdrop-blur-sm px-3 transition-all duration-300 ease-out`}
     >
       <div className="relative h-full py-6">
         <button
