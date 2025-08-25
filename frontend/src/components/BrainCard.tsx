@@ -331,9 +331,9 @@ const BrainCard = ({
         {/* card footer */}
         <div className="">
           <div className="tags flex flex-wrap gap-2 my-2">
-            <div className="tag text-white text-[11px] bg-purple-500 px-2 py-1 rounded-md">
+            {/* <div className="tag text-white text-[11px] bg-purple-500 px-2 py-1 rounded-md">
               #{"youtube"}
-            </div>
+            </div> */}
           </div>
           <div className="date text-black text-[8px] mt-5 flex justify-end">
             2025-07-09
